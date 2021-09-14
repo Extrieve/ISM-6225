@@ -22,9 +22,9 @@ namespace Assignment_1
                 foreach (char letter in vowels)
                 {
                     if (a.Contains(letter))
-                        aCounter++;
-                    if (a.Contains(letter))
-                        bCounter++;
+                        aCounter+= a.Count(f => f == letter); 
+                    if (b.Contains(letter))
+                        bCounter+= b.Count(f => f == letter);
                 }
                 return aCounter == bCounter;
             }
@@ -133,18 +133,19 @@ namespace Assignment_1
                 }
                 return restored;
             }
-            bool testcase = equal_bowels("AbCdEfGh");
+
+            bool testcase = equal_bowels("textbook");
             bool pangran_testcase = pangram_checker("thequickbrownfoxjumpsoverthelazydog");
-            int account_testcase = largest_account(1, 2);
+            int account_testcase = largest_account(2, 3);
             int jewel_testcase = jewel_checker("aA", "aAAbbbb");
             string shuffle_testcase = shuffle_string("codeleet", new int[] { 4, 5, 6, 7, 0, 2, 1, 3 });
             List<int> restore_testcase = new List<int>();
             restore_testcase = restore_string(new int[] { 0, 1, 2, 3, 4 }, new int[] { 0, 1, 2, 2, 1 });
-            Console.WriteLine(testcase);
-            Console.WriteLine(pangran_testcase);
-            Console.WriteLine(account_testcase);
-            Console.WriteLine(jewel_testcase);
-            Console.WriteLine(shuffle_testcase);
+            Console.WriteLine("Equal Bowels: " + testcase);
+            Console.WriteLine("Pangram: " + pangran_testcase);
+            Console.WriteLine("Bank Accounts: " + account_testcase);
+            Console.WriteLine("Jewel Count: " + jewel_testcase);
+            Console.WriteLine("Shuffle Testcase: " + shuffle_testcase);
             Console.WriteLine(String.Join(",", restore_testcase));
         }
     }
