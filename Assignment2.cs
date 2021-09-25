@@ -18,7 +18,7 @@ namespace DIS_Assignment_2_Fall_2021
 
             //Question 2:
             Console.WriteLine("Question 2:");
-            int[] nums = { 0, 1, 0, 3, 12 };
+            int[] nums = { 1, 3, 5, 6 };
             Console.WriteLine("Enter the target number:");
             int target = Int32.Parse(Console.ReadLine());
             int pos = SearchInsert(nums, target);
@@ -38,7 +38,7 @@ namespace DIS_Assignment_2_Fall_2021
 
             //Question 4:
             Console.WriteLine("Question 4");
-            int[] arr1 = { 1, 2, 2, 1, 1, 3 };
+            int[] arr1 = { 1, 2};
             bool unq = UniqueOccurrences(arr1);
             if (unq)
                 Console.WriteLine("Number of Occurences of each element are not same");
@@ -168,8 +168,32 @@ namespace DIS_Assignment_2_Fall_2021
             try
             {
                 //Write your Code here.
-                int answer = binarySearch(nums, 0, nums.Length-1, target);
-                return answer;
+                var result = nums.Length;
+                var lo = 0;
+                var hi = nums.Length - 1;
+
+                while (lo <= hi)
+                {
+                    var m = lo + (hi - lo) / 2;
+                    var item = nums[m];
+
+                    if (item == target)
+                    {
+                        result = m;
+                        break;
+                    }
+                    else if (item < target)
+                    {
+                        lo = m + 1;
+                    }
+                    else
+                    {
+                        hi = m - 1;
+                        result = m;
+                    }
+                }
+
+                return result;
             }
             catch (Exception)
             {
@@ -200,18 +224,32 @@ namespace DIS_Assignment_2_Fall_2021
                 List<string> commonwords = new List<string>();
                 //write your code here.
                 string lowercaseLetters = "abcdefghijklmnopqrstuvwxyz";
-                int maxCounter;
+                int minCounter;
+                int currentCounter;
+                bool allWords;
                 foreach(char letter in lowercaseLetters)
                 {
-                    maxCounter = 0;
-                    if (words[0].Contains(letter) && words[1].Contains(letter) && words[2].Contains(letter))
+                    minCounter = 10000;
+                    currentCounter = 0;
+                    allWords = true;
+                    foreach (string word in words)
                     {
-                        //Console.WriteLine(letter);
-                        maxCounter = Math.Max(Math.Max(words[0].Count(f => f == letter), words[1].Count(f => f == letter)), words[2].Count(f => f == letter));
-
-                        for (int i = 0; i < maxCounter; i++)
+                        if (word.Contains(letter))
+                        {
+                            currentCounter = word.Count(f => f == letter);
+                            if (currentCounter < minCounter)
+                                minCounter = currentCounter;
+                        }
+                        else
+                        {
+                            allWords = false;
+                            break;
+                        }
+                    }
+                    if (allWords) 
+                    {
+                        for (int i = 0; i < minCounter; i++)
                             commonwords.Add(letter.ToString());
-                        //Console.WriteLine(maxCounter);
                     }
                 }
 
@@ -247,19 +285,22 @@ namespace DIS_Assignment_2_Fall_2021
             {
                 //write your code here.
                 Dictionary<int, int> ocurrences = new Dictionary<int, int>();
-                int[] frequencies = new int[arr.Length];
-                foreach(int item in arr)
+                HashSet<int> hashSet = new HashSet<int>();
+                foreach (int item in arr)
                 {
                     if (ocurrences.ContainsKey(item))
                         ocurrences[item]++;
                     else
                         ocurrences[item] = 1;
                 }
-                foreach (int item in ocurrences.Values)
-                    if (frequencies.Contains(item))
+
+                foreach (var freq in ocurrences.Values)
+                {
+                    if (hashSet.Contains(freq)) 
                         return false;
-                    else
-                        frequencies.Append(item);
+                    hashSet.Add(freq);
+                }
+
                 return true;
             }
             catch (Exception)
@@ -556,35 +597,6 @@ namespace DIS_Assignment_2_Fall_2021
 
                 throw;
             }
-        }
-
-        // UTILITY FUNCTIONS
-        // Binary Search Implementation grabbed from GeeksForGeeks.
-        static int binarySearch(int[] arr, int l,
-                            int r, int x)
-        {
-            if (r >= l)
-            {
-                int mid = l + (r - l) / 2;
-
-                // If the element is present at the
-                // middle itself
-                if (arr[mid] == x)
-                    return mid;
-
-                // If element is smaller than mid, then
-                // it can only be present in left subarray
-                if (arr[mid] > x)
-                    return binarySearch(arr, l, mid - 1, x);
-
-                // Else the element can only be present
-                // in right subarray
-                return binarySearch(arr, mid + 1, r, x);
-            }
-
-            // We reach here when element is not present
-            // in array
-            return -1;
         }
     }
 }
